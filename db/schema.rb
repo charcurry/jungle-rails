@@ -15,10 +15,23 @@ ActiveRecord::Schema.define(version: 2021_06_26_062916) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "additions", id: :serial, force: :cascade do |t|
+    t.integer "story_id"
+    t.integer "user_id"
+    t.string "body", limit: 1000
+    t.datetime "time_posted"
+    t.boolean "accepted"
+  end
+
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "likes", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "addition_id"
   end
 
   create_table "line_items", force: :cascade do |t|
@@ -53,7 +66,26 @@ ActiveRecord::Schema.define(version: 2021_06_26_062916) do
     t.index ["category_id"], name: "index_products_on_category_id"
   end
 
+  create_table "stories", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.text "content"
+    t.string "title", limit: 100
+    t.datetime "time_created"
+    t.datetime "time_completed"
+  end
+
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 255, null: false
+    t.string "email", limit: 255, null: false
+    t.string "password", limit: 255, null: false
+  end
+
+  add_foreign_key "additions", "stories", name: "additions_story_id_fkey", on_delete: :cascade
+  add_foreign_key "additions", "users", name: "additions_user_id_fkey", on_delete: :cascade
+  add_foreign_key "likes", "additions", name: "likes_addition_id_fkey", on_delete: :cascade
+  add_foreign_key "likes", "users", name: "likes_user_id_fkey", on_delete: :cascade
   add_foreign_key "line_items", "orders"
   add_foreign_key "line_items", "products"
   add_foreign_key "products", "categories"
+  add_foreign_key "stories", "users", name: "stories_user_id_fkey", on_delete: :cascade
 end
