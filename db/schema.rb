@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_26_062916) do
+ActiveRecord::Schema.define(version: 2023_04_01_180807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,16 +74,17 @@ ActiveRecord::Schema.define(version: 2021_06_26_062916) do
     t.datetime "time_completed"
   end
 
-  create_table "users", id: :serial, force: :cascade do |t|
-    t.string "name", limit: 255, null: false
-    t.string "email", limit: 255, null: false
-    t.string "password", limit: 255, null: false
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "additions", "stories", name: "additions_story_id_fkey", on_delete: :cascade
-  add_foreign_key "additions", "users", name: "additions_user_id_fkey", on_delete: :cascade
   add_foreign_key "likes", "additions", name: "likes_addition_id_fkey", on_delete: :cascade
-  add_foreign_key "likes", "users", name: "likes_user_id_fkey", on_delete: :cascade
+
   add_foreign_key "line_items", "orders"
   add_foreign_key "line_items", "products"
   add_foreign_key "products", "categories"
