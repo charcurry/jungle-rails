@@ -84,7 +84,9 @@ ActiveRecord::Schema.define(version: 2023_04_01_180807) do
 
   add_foreign_key "additions", "stories", name: "additions_story_id_fkey", on_delete: :cascade
   add_foreign_key "likes", "additions", name: "likes_addition_id_fkey", on_delete: :cascade
+
   add_foreign_key "line_items", "orders"
   add_foreign_key "line_items", "products"
   add_foreign_key "products", "categories"
+  add_foreign_key "stories", "users", name: "stories_user_id_fkey", on_delete: :cascade
 end
